@@ -52,14 +52,41 @@ class AnimatedIcon extends AnimatedWidget {
   Widget build(BuildContext context) {
     final animation = listenable as Animation<double>;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Airplane!'),
-      ),
-      body: Container(
-        margin: const EdgeInsets.symmetric(vertical: 10),
-        child: Center(
-          child: Icon(Icons.airplanemode_active, size: animation.value),
+        appBar: AppBar(
+          title: const Text('Airplane!'),
         ),
+        body: GrowTransition(
+          child: Container(
+            margin: const EdgeInsets.symmetric(vertical: 10),
+            child: Center(
+              child: Icon(Icons.airplanemode_active, size: animation.value),
+            ),
+          ),
+          animation: animation,
+        ));
+  }
+}
+
+class GrowTransition extends StatelessWidget {
+  const GrowTransition({required this.child, required this.animation, Key? key})
+      : super(key: key);
+
+  final Widget child;
+  final Animation<double> animation;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: AnimatedBuilder(
+        animation: animation,
+        builder: (context, child) {
+          return SizedBox(
+            height: animation.value,
+            width: animation.value,
+            child: child,
+          );
+        },
+        child: child,
       ),
     );
   }

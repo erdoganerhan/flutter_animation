@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animation/pages/airplane.dart';
+import 'package:flutter_animation/pages/bouncing_ball.dart';
 
 class Apps extends StatefulWidget {
   const Apps({Key? key}) : super(key: key);
@@ -24,6 +25,16 @@ class _AppsState extends State<Apps> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const Airplane()),
+                  );
+                }),
+            ListTile(
+                leading: const Icon(Icons.circle),
+                title: const Text('Bouncing Ball'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const BouncingBallDemo()),
                   );
                 })
           ],
