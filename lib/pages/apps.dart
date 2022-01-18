@@ -19,7 +19,7 @@ class _AppsState extends State<Apps> {
           children: [
             ListTile(
                 leading: const Icon(Icons.airplanemode_active),
-                title: const Text('Airplane'),
+                title: const Text('Airplane!'),
                 onTap: () {
                   Navigator.push(
                     context,

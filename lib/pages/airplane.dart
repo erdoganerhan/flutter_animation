@@ -7,6 +7,7 @@ class Airplane extends StatefulWidget {
   _AirplaneState createState() => _AirplaneState();
 }
 
+// #docregion print-state
 class _AirplaneState extends State<Airplane>
     with SingleTickerProviderStateMixin {
   late Animation<double> animation;
@@ -17,35 +18,49 @@ class _AirplaneState extends State<Airplane>
     super.initState();
     controller =
         AnimationController(duration: const Duration(seconds: 2), vsync: this);
-    // #docregion addListener
     animation = Tween<double>(begin: 0, end: 300).animate(controller)
-      ..addListener(() {
-        // #enddocregion addListener
-        setState(() {
-          // The state that has changed here is the animation object’s value.
-        });
-        // #docregion addListener
-      });
-    // #enddocregion addListener
+      // #enddocregion print-state
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          controller.reverse();
+        } else if (status == AnimationStatus.dismissed) {
+          controller.forward();
+        }
+      })
+      // #docregion print-state
+      ..addStatusListener((state) => print('$state'));
     controller.forward();
   }
+  // #enddocregion print-state
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Airplane')),
-      body: Center(
-        child: Container(
-          margin: const EdgeInsets.symmetric(vertical: 10),
-          child: Icon(Icons.airplanemode_active, size: animation.value),
-        ),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => AnimatedIcon(animation: animation);
 
   @override
   void dispose() {
     controller.dispose();
     super.dispose();
+  }
+  // #docregion print-state
+}
+
+class AnimatedIcon extends AnimatedWidget {
+  const AnimatedIcon({Key? key, required Animation<double> animation})
+      : super(key: key, listenable: animation);
+
+  @override
+  Widget build(BuildContext context) {
+    final animation = listenable as Animation<double>;
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Airplane!'),
+      ),
+      body: Container(
+        margin: const EdgeInsets.symmetric(vertical: 10),
+        child: Center(
+          child: Icon(Icons.airplanemode_active, size: animation.value),
+        ),
+      ),
+    );
   }
 }
